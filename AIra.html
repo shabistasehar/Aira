@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aira - Women Safety & Support</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif']
+                    },
+                    colors: {
+                        'lavender': {
+                            50: '#f8f7ff',
+                            100: '#f0edff',
+                            200: '#e8e8ee',
+                            300: '#d4d1e8',
+                            400: '#bca8e2',
+                            500: '#a78bfa',
+                            600: '#8b5cf6',
+                            700: '#7c3aed',
+                            800: '#6d28d9',
+                            900: '#5b21b6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #f8f7ff 0%, #e8e8ee 50%, #ffffff 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .soft-shadow {
+            box-shadow: 0 2px 4px rgba(188, 168, 226, 0.1);
+        }
+        .typing-dots {
+            display: inline-block;
+        }
+        .typing-dots::after {
+            content: '...';
+            animation: typing 1.5s infinite;
+        }
+        @keyframes typing {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+        .emergency-countdown {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border: 1px solid #fecaca;
+        }
+        .voice-enabled {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 1px solid #bbf7d0;
+        }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg font-inter">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-lavender-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 items-center justify-between">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-lavender-600 to-lavender-800 font-poppins">
+                        Aira
+                    </h1>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" onclick="showPage('home')" class="nav-link text-gray-700 hover:text-lavender-600 transition-colors duration-200">Home</a>
+                    <a href="#" onclick="showPage('resources')" class="nav-link text-gray-700 hover:text-lavender-600 transition-colors duration-200">Resources</a>
+                    <a href="#" onclick="showPage('contacts')" class="nav-link text-gray-700 hover:text-lavender-600 transition-colors duration-200">Contacts</a>
+                    <a href="#" onclick="showPage('features')" class="nav-link text-gray-700 hover:text-lavender-600 transition-colors duration-200">Features</a>
+                    <a href="#" onclick="showPage('chatbot')" class="nav-link text-gray-700 hover:text-lavender-600 transition-colors duration-200">Chatbot</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button id="locationToggle" onclick="toggleLocation()" class="px-4 py-2 bg-lavender-100 text-lavender-700 rounded-lg hover:bg-lavender-200 transition-colors duration-200 text-sm font-medium">
+                        Enable Location
+                    </button>
+                    <button id="voiceToggle" onclick="toggleVoice()" class="px-4 py-2 bg-lavender-100 text-lavender-700 rounded-lg hover:bg-lavender-200 transition-colors duration-200 text-sm font-medium">
+                        Enable Voice
+                    </button>
+                    <button id="loginButton" onclick="showPage('login')" class="px-4 py-2 bg-lavender-600 text-white rounded-lg hover:bg-lavender-700 transition-colors duration-200 text-sm font-medium">
+                        Login
+                    </button>
+                    <button id="logoutButton" onclick="logout()" class="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors duration-200 text-sm font-medium hidden">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="min-h-screen">
+        <!-- Home Page -->
+        <div id="home-page" class="page-content">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <!-- Hero Section -->
+                <div class="text-center mb-16">
+                    <h1 class="text-5xl font-bold text-gray-900 mb-6 font-poppins">
+                        Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-lavender-600 to-lavender-800">Aira</span>
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                        Your trusted companion for safety, support, and empowerment. 
+                        Aira provides 24/7 emotional support, emergency assistance, and connects you with vital resources.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button onclick="showPage('chatbot')" class="px-8 py-3 bg-lavender-600 text-white rounded-lg hover:bg-lavender-700 transition-colors duration-200 font-medium">
+                            Start Chatting
+                        </button>
+                        <button onclick="showPage('features')" class="px-8 py-3 bg-white text-lavender-600 border border-lavender-300 rounded-lg hover:bg-lavender-50 transition-colors duration-200 font-medium">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Features Overview -->
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                    <div class="bg-white rounded-xl p-6 card-shadow hover:shadow-lg transition-shadow duration-300">
+                        <div class="w-12 h-12 bg-lavender-100 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-lavender-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">AI Chat Support</h3>
+                        <p class="text-gray-600">AI companion ready to listen and provide emotional support whenever you need it.</p>
+                    </div>
+
+                    <div class="bg-white rounded-xl p-6 card-shadow hover:shadow-lg transition-shadow duration-300">
+                        <div class="w-12 h-12 bg-lavender-100 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-lavender-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Voice Recognition</h3>
+                        <p class="text-gray-600">Emergency voice activation system that listens and triggers immediate assistance.</p>
+                    </div>
+
+                    <div class="bg-white rounded-xl p-6 card-shadow hover:shadow-lg transition-shadow duration-300">
+                        <div class="w-12 h-12 bg-lavender-100 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-lavender-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Emergency Alerts</h3>
+                        <p class="text-gray-600">Instant emergency notification system that contacts your trusted contacts and emergency services.</p>
+                    </div>
+
+                    <div class="bg-white rounded-xl p-6 card-shadow hover:shadow-lg transition-shadow duration-300">
+                        <div class="w-12 h-12 bg-lavender-100 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-lavender-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Emotional support</h3>
+                        <p class="text-gray-600">AI that provides appropriate support and resources.</p>
+                    </div>
+
+                    <div class="bg-white rounded-xl p-6 card-shadow hover:shadow-lg transition-shadow duration-300">
+                        <div class="w-12 h-12 bg-lavender-100 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-lavender-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">NGO Integration</h3>
+                        <p class="text-gray-600">Connect with local NGOs and support organizations for specialized assistance and resources.</p>
+                    </div>
+
+                    <div class="bg-white rounded-xl p-6 card-shadow hover:shadow-lg transition-shadow duration-300">
+                        <div class="w-12 h-12 bg-lavender-100 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-lavender-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Secure & Private</h3>
+                        <p class="text-gray-600">Ensure your conversations and data remain completely secure and confidential..</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Page -->
+        <div id="login-page" class="page-content hidden">
+            <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-md w-full space-y-8">
+                    <div class="bg-white rounded-2xl card-shadow p-8">
+                        <div class="text-center">
+                            <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-lavender-600 to-lavender-800 font-poppins mb-2">
+                                Aira
+                            </h1>
+                            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Welcome Back</h2>
+                        </div>
+                        
+                        <form class="space-y-6" onsubmit="handleLogin(event)">
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email or Username</label>
+                                <input id="email" name="email" type="text" required 
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lavender-500 focus:border-transparent transition-colors duration-200"
+                                       placeholder="Enter your email or username">
+                            </div>
+                            
+                            <div>
+                                <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                                <input id="password" name="password" type="password" required 
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lavender-500 focus:border-transparent transition-colors duration-200"
+                                       placeholder="Enter your password">
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <input id="remember-me" name="remember-me" type="checkbox" 
+                                           class="h-4 w-4 text-lavender-600 focus:ring-lavender-500 border-gray-300 rounded">
+                                    <label for="remember-me" class="ml-2 block text-sm text-gray-700">
+                                        Remember me
+                                    </label>
+                                </div>
+                                
+                                <div class="text-sm">
+                                    <a href="#" class="font-medium text-lavender-600 hover:text-lavender-500 transition-colors duration-200">
+                                        Forgot password?
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" 
+                                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-lavender-600 hover:bg-lavender-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lavender-500 transition-colors duration-200">
+                                Login
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resources Page -->
+        <div id="resources-page" class="page-content hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-bold text-gray-900 mb-4 font-poppins">Support Resources</h1>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                        Find NGOs and support organizations near you. Search by name, location, or service type.
+                    </p>
+                </div>
+
+                <div class="mb-8">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <input id="resource-search" type="text" placeholder="Search by name or location..." 
+                               class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lavender-500 focus:border-transparent transition-colors duration-200">
+                        <button onclick="showNearbyNGOs()" id="nearbyButton" 
+                                class="px-6 py-3 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors duration-200 font-medium">
+                            Show Nearby NGOs
+                        </button>
+                        <button onclick="clearResourceSearch()" 
+                                class="px-6 py-3 bg-lavender-100 text-lavender-700 rounded-lg hover:bg-lavender-200 transition-colors duration-200 font-medium">
+                            Clear
+                        </button>
+                    </div>
+                    <div id="location-status" class="mt-2 text-sm text-gray-600 hidden">
+                        <span id="location-text">Location access enabled. Showing nearby NGOs.</span>
+                    </div>
+                </div>
+
+                <div id="resources-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Resources will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Contacts Page -->
+        <div id="contacts-page" class="page-content hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-bold text-gray-900 mb-4 font-poppins">Emergency Contacts</h1>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                        Manage your trusted contacts for emergency situations. Add, edit, or remove contacts as needed.
+                    </p>
+                </div>
+
+                <!-- Add Contact Form -->
+                <div class="bg-white rounded-xl card-shadow p-6 mb-8">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Add New Contact</h2>
+                    <form onsubmit="addContact(event)" class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                            <input type="text" id="contact-name" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lavender-500 focus:border-transparent transition-colors duration-200"
+                                   placeholder="Contact name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                            <input type="tel" id="contact-phone" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lavender-500 focus:border-transparent transition-colors duration-200"
+                                   placeholder="Phone number">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Relationship</label>
+                            <input type="text" id="contact-relationship" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lavender-500 focus:border-transparent transition-colors duration-200"
+                                   placeholder="e.g., Family, Friend, Doctor">
+                        </div>
+                        <div class="flex items-end">
+                            <button type="submit" 
+                                    class="w-full px-6 py-3 bg-lavender-600 text-white rounded-lg hover:bg-lavender-700 transition-colors duration-200 font-medium">
+                                Add Contact
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Default Emergency Contact -->
+                <div class="bg-red-50 border border-red-200 rounded-xl p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-red-800 mb-2">Emergency Services</h3>
+                    <p class="text-red-700 mb-4">Call 112 for immediate emergency assistance</p>
+                    <button onclick="callEmergency()" 
+                            class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200 font-medium">
+                        Call Emergency (112)
+                    </button>
+                </div>
+
+                <!-- Contacts List -->
+                <div id="contacts-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Contacts will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Page -->
+        <div id="features-page" class="page-content hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-bold text-gray-900 mb-4 font-poppins">Features</h1>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                        Discover the comprehensive safety and support features designed to keep you secure and empowered.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-xl card-shadow p-6 hover:shadow-lg transition-shadow duration-300">
+                        <div class="w-12 h-12 bg-lavender-100 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-lavender-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Voice Recognition</h3>
+                        <p class="text-gray-600 mb-4">Voice recognition system that listens and emergency keywords to trigger immediate assistance.</p>
+                        <div class="flex items-center text-sm text-lavender-600">
+                            <span class="w-2 h-2 bg-lavender-600 rounded-full mr-2"></span>
+                            Always listening for "help"
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl card-shadow p-6 hover:shadow-lg transition-shadow duration-300">
+                        <div class="w-12 h-12 bg-lavender-100 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-lavender-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Emotional support</h3>
+                        <p class="text-gray-600 mb-4">"Responding with care, when you need it most."</p>
+                        <div class="flex items-center text-sm text-lavender-600">
+                            <span class="w-2 h-2 bg-lavender-600 rounded-full mr-2"></span>
+                            Empathy Driven
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl card-shadow p-6 hover:shadow-lg transition-shadow duration-300">
+                        <div class="w-12 h-12 bg-lavender-100 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-lavender-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Alert System</h3>
+                        <p class="text-gray-600 mb-4">Instant emergency notification system that contacts your trusted contacts and emergency services with your location.</p>
+                        <div class="flex items-center text-sm text-lavender-600">
+                            <span class="w-2 h-2 bg-lavender-600 rounded-full mr-2"></span>
+                            One-click emergency activation
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl card-shadow p-6 hover:shadow-lg transition-shadow duration-300">
+                        <div class="w-12 h-12 bg-lavender-100 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-lavender-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">AI Chat Support</h3>
+                        <p class="text-gray-600 mb-4">AI companion ready to provide emotional support and guidance.</p>
+                        <div class="flex items-center text-sm text-lavender-600">
+                            <span class="w-2 h-2 bg-lavender-600 rounded-full mr-2"></span>
+                            Always available.
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl card-shadow p-6 hover:shadow-lg transition-shadow duration-300">
+                        <div class="w-12 h-12 bg-lavender-100 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-lavender-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">NGO Integration</h3>
+                        <p class="text-gray-600 mb-4">Comprehensive database of NGOs and support organizations with direct contact information and service details.</p>
+                        <div class="flex items-center text-sm text-lavender-600">
+                            <span class="w-2 h-2 bg-lavender-600 rounded-full mr-2"></span>
+                            Local and national support networks
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl card-shadow p-6 hover:shadow-lg transition-shadow duration-300">
+                        <div class="w-12 h-12 bg-lavender-100 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-lavender-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Privacy & Security</h3>
+                        <p class="text-gray-600 mb-4">Ensure your conversations and data remain completely secure and confidential.</p>
+                        <div class="flex items-center text-sm text-lavender-600">
+                            <span class="w-2 h-2 bg-lavender-600 rounded-full mr-2"></span>
+                            "Safe. Secure. Confidential."
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       <!-- Chatbot Page -->
+<div id="chatbot-page" class="page-content hidden">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4 font-poppins">AI Chat Support</h1>
+            <p class="text-xl text-gray-600">
+                Chat with Aira, your empathetic AI companion. I'm here to listen and provide support.
+            </p>
+        </div>
+
+        <div class="bg-white rounded-2xl card-shadow h-96 flex flex-col">
+            <!-- Chat Header -->
+            <div class="flex items-center justify-between p-4 border-b border-gray-200">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-lavender-100 rounded-full flex items-center justify-center mr-3">
+                        <svg class="w-5 h-5 text-lavender-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Aira</h3>
+                        <p class="text-sm text-gray-500">Online</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span class="text-sm text-gray-500">Ready to help</span>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4">
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 bg-lavender-100 rounded-full flex items-center justify-center">
+                        <svg class="w-4 h-4 text-lavender-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                    </div>
+                    <div class="bg-lavender-50 rounded-lg p-3 max-w-xs">
+                        <p class="text-sm text-gray-700">
+                            Hi! I'm Aira, your AI companion. How are you feeling today? I'm here to listen and provide support whenever you need it.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="p-4 border-t border-gray-200">
+                <div class="flex space-x-3">
+                    <input id="chat-input" type="text" placeholder="Type your message..."
+                           class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lavender-500 focus:border-transparent transition-colors duration-200"
+                           onkeypress="handleChatKeyPress(event)">
+                    <button onclick="sendMessage()"
+                            class="px-6 py-2 bg-lavender-600 text-white rounded-lg hover:bg-lavender-700 transition-colors duration-200 font-medium">
+                        Send
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</main>
+
+    <!-- Emergency Modal -->
+    <div id="emergency-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full text-center">
+            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Emergency Alert</h3>
+            <p class="text-gray-600 mb-6">Sending email to trusted contact...</p>
+            <div id="countdown" class="text-2xl font-bold text-red-600 mb-4">20</div>
+            <button onclick="cancelEmergency()" 
+                    class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-200">
+                Cancel
+            </button>
+        </div>
+    </div>
+
+    <!-- Voice Permission Modal -->
+    <div id="voice-permission-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full text-center">
+            <div class="w-16 h-16 bg-lavender-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-lavender-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Enable Voice Recognition</h3>
+            <p class="text-gray-600 mb-6">Allow microphone access to enable voice recognition for emergency situations.</p>
+            <div class="flex space-x-3">
+                <button onclick="denyVoicePermission()" 
+                        class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-200">
+                    Deny
+                </button>
+                <button onclick="grantVoicePermission()" 
+                        class="flex-1 px-4 py-2 bg-lavender-600 text-white rounded-lg hover:bg-lavender-700 transition-colors duration-200">
+                    Allow
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-lavender-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center">
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">Aira</h3>
+                <p class="text-gray-600 mb-4">Women Safety & Support Platform</p>
+                <p class="text-sm text-gray-500">© 2025 Aira. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables
+        let currentPage = 'home';
+        let isVoiceEnabled = false;
+        let isLocationEnabled = false;
+        let userLocation = null;
+        let isLoggedIn = false;
+        let pyodide = null;
+        let chatSession = null;
+        let emergencyCountdown = null;
+        let voiceRecognition = null;
+        let contacts = [
+            { name: 'Emergency Services', phone: '112', relationship: 'Emergency' }
+        ];
+
+        // NGO Resources Data
+        const resources = [
+            {
+                name: 'Bembala Foundation - Free & Confidential Support for Women & Children facing Abuse or Distress',
+                phone: '080 4377 5561',
+                location: 'Whitefield, Bengaluru',
+                tags: ['women', 'children', 'support', 'abuse', 'counselling'],
+                url: 'https://bembalango.org'
+            },
+            {
+                name: 'Vydehi Women and Child Foundation',
+                phone: '090355 36741',
+                location: 'Vydehi campus, Whitefield, Bengaluru',
+                tags: ['women', 'children', 'health', 'support'],
+                url: 'https://www.vims.ac.in'
+            },
+            { name: 'Vimochana', phone: '080 2549 2783', location: 'Bengaluru', tags: ['women', 'rights', 'support'] },
+            { name: 'YWCA of Bangalore City', phone: '084539 00432', location: 'Bengaluru', tags: ['women', 'community', 'support'] },
+            { name: 'Bharathiya Grameen Mahila Sangh', phone: '063633 29356', location: 'Bengaluru', tags: ['women', 'rural', 'empowerment'] },
+            { name: 'JANODAYA TRUST WOMENS HELPLINE', phone: '080 2333 2564', location: 'Bengaluru', tags: ['women', 'helpline', 'support'] },
+            { name: 'Shivashakthi Mahila Sangha', phone: '', location: 'Bengaluru', tags: ['women', 'community'] },
+            { name: 'Empower Womens Trust (R)', phone: '', location: 'Bengaluru', tags: ['women', 'empowerment'] },
+            { name: 'The National Alliance of Women', phone: '', location: 'Bengaluru', tags: ['women', 'advocacy'] },
+            { name: "Aweksha - A Women's Trust", phone: '', location: 'Bengaluru', tags: ['women', 'support'] },
+            { name: 'Indian Lion Women And Others Human Rights Welfare Trust', phone: '', location: 'Bengaluru', tags: ['women', 'human-rights'] },
+            { name: 'Breakthrough', phone: '', location: 'Bengaluru', tags: ['women', 'awareness'] },
+            { name: 'Lovedale Foundation', phone: '', location: 'Bengaluru', tags: ['women', 'children', 'education'] },
+            { name: 'Zav Foundation', phone: '', location: 'Bengaluru', tags: ['women', 'support'] },
+            { name: 'Durga India', phone: '', location: 'Bengaluru', tags: ['women', 'safety'] },
+            { name: 'Mahila Dakshatha Samiti', phone: '', location: 'Bengaluru', tags: ['women', 'advocacy'] },
+            { name: 'Association Of Women Entrepreneurs Of Karnataka', phone: '', location: 'Bengaluru', tags: ['women', 'entrepreneurship'] }
+        ];
+
+        // Page Navigation
+        function showPage(page) {
+            // Hide all pages
+            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+            
+            // Show selected page
+            document.getElementById(page + '-page').classList.remove('hidden');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('text-lavender-600', 'font-semibold');
+                link.classList.add('text-gray-700');
+            });
+            
+            if (page !== 'login') {
+                const activeLink = document.querySelector(`[onclick="showPage('${page}')"]`);
+                if (activeLink) {
+                    activeLink.classList.add('text-lavender-600', 'font-semibold');
+                    activeLink.classList.remove('text-gray-700');
+                }
+            }
+            
+            currentPage = page;
+            
+            // Load page-specific content
+            if (page === 'resources') {
+                loadResources();
+            } else if (page === 'contacts') {
+                loadContacts();
+            } else if (page === 'chatbot') {
+                initializeChatbot();
+            }
+        }
+
+        // Login functionality
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('remember-me').checked;
+            
+            // Simple validation (in real app, this would be server-side)
+            if (email && password) {
+                isLoggedIn = true;
+                
+                // Save credentials if remember me is checked
+                if (rememberMe) {
+                    localStorage.setItem('aira_email', email);
+                    localStorage.setItem('aira_password', password);
+                    localStorage.setItem('aira_remember', 'true');
+                } else {
+                    localStorage.removeItem('aira_email');
+                    localStorage.removeItem('aira_password');
+                    localStorage.removeItem('aira_remember');
+                }
+                
+                updateLoginState();
+                alert('Login successful! Welcome to AIra.');
+                showPage('home');
+            } else {
+                alert('Please enter both email and password.');
+            }
+        }
+
+        function logout() {
+            isLoggedIn = false;
+            localStorage.removeItem('aira_email');
+            localStorage.removeItem('aira_password');
+            localStorage.removeItem('aira_remember');
+            updateLoginState();
+            showPage('home');
+        }
+
+        function updateLoginState() {
+            const loginButton = document.getElementById('loginButton');
+            const logoutButton = document.getElementById('logoutButton');
+            
+            if (isLoggedIn) {
+                loginButton.classList.add('hidden');
+                logoutButton.classList.remove('hidden');
+            } else {
+                loginButton.classList.remove('hidden');
+                logoutButton.classList.add('hidden');
+            }
+        }
+
+        function loadSavedCredentials() {
+            const savedEmail = localStorage.getItem('aira_email');
+            const savedPassword = localStorage.getItem('aira_password');
+            const rememberMe = localStorage.getItem('aira_remember') === 'true';
+            
+            if (savedEmail && savedPassword && rememberMe) {
+                document.getElementById('email').value = savedEmail;
+                document.getElementById('password').value = savedPassword;
+                document.getElementById('remember-me').checked = true;
+                isLoggedIn = true;
+                updateLoginState();
+            }
+        }
+
+        // Location functionality
+        function toggleLocation() {
+            if (!isLocationEnabled) {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        function(position) {
+                            userLocation = {
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude
+                            };
+                            isLocationEnabled = true;
+                            updateLocationButton();
+                            alert('Location access granted! You can now see nearby NGOs.');
+                        },
+                        function(error) {
+                            alert('Location access denied. Please enable location to see nearby NGOs.');
+                            console.error('Location error:', error);
+                        }
+                    );
+                } else {
+                    alert('Geolocation is not supported by this browser.');
+                }
+            } else {
+                isLocationEnabled = false;
+                userLocation = null;
+                updateLocationButton();
+            }
+        }
+
+        function updateLocationButton() {
+            const button = document.getElementById('locationToggle');
+            if (isLocationEnabled) {
+                button.textContent = 'Disable Location';
+                button.className = 'px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors duration-200 text-sm font-medium';
+            } else {
+                button.textContent = 'Enable Location';
+                button.className = 'px-4 py-2 bg-lavender-100 text-lavender-700 rounded-lg hover:bg-lavender-200 transition-colors duration-200 text-sm font-medium';
+            }
+        }
+
+        function showNearbyNGOs() {
+            if (!isLocationEnabled) {
+                alert('Please enable location access first to see nearby NGOs.');
+                return;
+            }
+            
+            if (!userLocation) {
+                alert('Location not available. Please try again.');
+                return;
+            }
+            
+            // Show location status
+            document.getElementById('location-status').classList.remove('hidden');
+            
+            // Filter resources by location (simplified - in real app, you'd use actual distance calculation)
+            const nearbyResources = resources.filter(resource => 
+                resource.location.toLowerCase().includes('bengaluru') || 
+                resource.location.toLowerCase().includes('whitefield')
+            );
+            
+            const container = document.getElementById('resources-list');
+            renderResources(nearbyResources, container);
+        }
+
+        // Voice functionality
+        function toggleVoice() {
+            if (!isVoiceEnabled) {
+                document.getElementById('voice-permission-modal').classList.remove('hidden');
+            } else {
+                disableVoice();
+            }
+        }
+
+        function grantVoicePermission() {
+            document.getElementById('voice-permission-modal').classList.add('hidden');
+            
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                voiceRecognition = new SpeechRecognition();
+                voiceRecognition.continuous = true;
+                voiceRecognition.interimResults = false;
+                voiceRecognition.lang = 'en-US';
+                
+                voiceRecognition.onresult = function(event) {
+                    const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
+                    if (transcript.includes('help') || transcript.includes('emergency')) {
+                        triggerEmergency();
+                    }
+                };
+                
+                voiceRecognition.start();
+                isVoiceEnabled = true;
+                updateVoiceButton();
+            } else {
+                alert('Speech recognition not supported in this browser.');
+            }
+        }
+
+        function denyVoicePermission() {
+            document.getElementById('voice-permission-modal').classList.add('hidden');
+        }
+
+        function disableVoice() {
+            if (voiceRecognition) {
+                voiceRecognition.stop();
+                voiceRecognition = null;
+            }
+            isVoiceEnabled = false;
+            updateVoiceButton();
+        }
+
+        function updateVoiceButton() {
+            const button = document.getElementById('voiceToggle');
+            if (isVoiceEnabled) {
+                button.textContent = 'Disable Voice';
+                button.className = 'px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors duration-200 text-sm font-medium';
+            } else {
+                button.textContent = 'Enable Voice';
+                button.className = 'px-4 py-2 bg-lavender-100 text-lavender-700 rounded-lg hover:bg-lavender-200 transition-colors duration-200 text-sm font-medium';
+            }
+        }
+
+        // Emergency functionality
+        function triggerEmergency() {
+            document.getElementById('emergency-modal').classList.remove('hidden');
+            
+            let countdown = 20;
+            const countdownElement = document.getElementById('countdown');
+            
+            emergencyCountdown = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(emergencyCountdown);
+                    sendEmergencyAlert();
+                }
+            }, 1000);
+        }
+
+        function cancelEmergency() {
+            document.getElementById('emergency-modal').classList.add('hidden');
+            if (emergencyCountdown) {
+                clearInterval(emergencyCountdown);
+            }
+        }
+
+        function sendEmergencyAlert() {
+            // Simulate sending emergency alert
+            alert('Emergency alert sent to trusted contacts!');
+            document.getElementById('emergency-modal').classList.add('hidden');
+        }
+
+        function callEmergency() {
+            window.location.href = 'tel:112';
+        }
+
+        // Resources functionality
+        function loadResources() {
+            const container = document.getElementById('resources-list');
+            const searchInput = document.getElementById('resource-search');
+            
+            function renderResources(resourceList) {
+                if (!resourceList || resourceList.length === 0) {
+                    container.innerHTML = '<div class="col-span-full text-center text-gray-500 py-8">No resources found.</div>';
+                    return;
+                }
+                
+                const tagClasses = [
+                    'bg-lavender-100 text-lavender-800',
+                    'bg-indigo-100 text-indigo-800',
+                    'bg-emerald-100 text-emerald-800',
+                    'bg-rose-100 text-rose-800',
+                    'bg-sky-100 text-sky-800'
+                ];
+                
+                function badgeClass(index) { return tagClasses[index % tagClasses.length]; }
+                
+                container.innerHTML = resourceList.map(r => `
+                    <div class="bg-white rounded-xl card-shadow p-6 hover:shadow-lg transition-shadow duration-300">
+                        <div class="h-1 w-full bg-gradient-to-r from-lavender-400 via-lavender-600 to-indigo-500 rounded-t-xl -m-6 mb-4"></div>
+                        <h3 class="font-semibold text-gray-900 mb-2">${r.name}</h3>
+                        <p class="text-sm text-gray-600 mb-3">${r.location}</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            ${(r.tags || []).map((t, i) => `<span class="text-xs px-2 py-1 rounded ${badgeClass(i)}">${t}</span>`).join('')}
+                        </div>
+                        <div class="flex items-center gap-2">
+                            ${r.phone ? `<a href="tel:${r.phone.replace(/\s+/g,'')}" class="px-3 py-1 bg-lavender-600 text-white text-sm rounded hover:bg-lavender-700 transition-colors duration-200">Call</a>` : ''}
+                            ${r.url ? `<a href="${r.url}" target="_blank" rel="noopener" class="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded hover:bg-gray-200 transition-colors duration-200">Website</a>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            function filterResources() {
+                const query = searchInput.value.toLowerCase();
+                const filtered = resources.filter(r => 
+                    r.name.toLowerCase().includes(query) || 
+                    r.location.toLowerCase().includes(query) ||
+                    r.tags.some(tag => tag.toLowerCase().includes(query))
+                );
+                renderResources(filtered);
+            }
+            
+            searchInput.addEventListener('input', filterResources);
+            renderResources(resources);
+        }
+
+        function clearResourceSearch() {
+            document.getElementById('resource-search').value = '';
+            loadResources();
+        }
+
+        // Contacts functionality
+        function loadContacts() {
+            const container = document.getElementById('contacts-list');
+            
+            function renderContacts() {
+                container.innerHTML = contacts.map((contact, index) => `
+                    <div class="bg-white rounded-xl card-shadow p-6 hover:shadow-lg transition-shadow duration-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900">${contact.name}</h3>
+                                <p class="text-sm text-gray-600">${contact.relationship || 'Contact'}</p>
+                            </div>
+                            ${index > 0 ? `<button onclick="deleteContact(${index})" class="text-red-500 hover:text-red-700 transition-colors duration-200">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>` : ''}
+                        </div>
+                        <p class="text-sm text-gray-600 mb-4">${contact.phone}</p>
+                        <a href="tel:${contact.phone}" class="block w-full px-4 py-2 bg-lavender-600 text-white text-center rounded-lg hover:bg-lavender-700 transition-colors duration-200">
+                            Call Now
+                        </a>
+                    </div>
+                `).join('');
+            }
+            
+            renderContacts();
+        }
+
+        function addContact(event) {
+            event.preventDefault();
+            const name = document.getElementById('contact-name').value;
+            const phone = document.getElementById('contact-phone').value;
+            const relationship = document.getElementById('contact-relationship').value;
+            
+            if (name && phone) {
+                contacts.push({ name, phone, relationship });
+                loadContacts();
+                
+                // Clear form
+                document.getElementById('contact-name').value = '';
+                document.getElementById('contact-phone').value = '';
+                document.getElementById('contact-relationship').value = '';
+            }
+        }
+
+        function deleteContact(index) {
+            if (confirm('Are you sure you want to delete this contact?')) {
+                contacts.splice(index, 1);
+                loadContacts();
+            }
+        }
+
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedCredentials();
+            showPage('home');
+        });
+    
+async function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const message = input.value.trim();
+    
+    if (!message) return;
+
+    // Add user message to chat
+    addMessageToChat(message, 'user');
+    input.value = '';
+
+    // Show typing indicator
+    showTypingIndicator();
+
+    try {
+        // Call Flask backend
+        const response = await fetch("http://127.0.0.1:5004/get_response", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message })
+        });
+
+        const data = await response.json();
+        hideTypingIndicator();
+
+        // Add AI response
+        addMessageToChat(data.reply, 'ai');
+
+    } catch (err) {
+        hideTypingIndicator();
+        console.error("Error:", err);
+        addMessageToChat("I'm having trouble connecting right now. Please try again.", 'ai');
+    }
+}
+
+// Add message to chat box
+function addMessageToChat(message, sender) {
+    const container = document.getElementById('chat-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'flex items-start space-x-3 fade-in';
+
+    if (sender === 'user') {
+        messageDiv.innerHTML = `
+            <div class="flex-1"></div>
+            <div class="bg-lavender-600 text-white rounded-lg p-3 max-w-xs">
+                <p class="text-sm">${message}</p>
+            </div>
+        `;
+    } else {
+        messageDiv.innerHTML = `
+            <div class="w-8 h-8 bg-lavender-100 rounded-full flex items-center justify-center">
+                <svg class="w-4 h-4 text-lavender-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                </svg>
+            </div>
+            <div class="bg-lavender-50 rounded-lg p-3 max-w-xs">
+                <p class="text-sm text-gray-700">${message}</p>
+            </div>
+        `;
+    }
+
+    container.appendChild(messageDiv);
+    container.scrollTop = container.scrollHeight;
+}
+
+// Typing indicator
+function showTypingIndicator() {
+    const container = document.getElementById('chat-messages');
+    const typingDiv = document.createElement('div');
+    typingDiv.id = 'typing-indicator';
+    typingDiv.className = 'flex items-start space-x-3';
+    typingDiv.innerHTML = `
+        <div class="w-8 h-8 bg-lavender-100 rounded-full flex items-center justify-center">
+            <svg class="w-4 h-4 text-lavender-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+            </svg>
+        </div>
+        <div class="bg-lavender-50 rounded-lg p-3 max-w-xs">
+            <p class="text-sm text-gray-700 typing-dots">Aira is typing</p>
+        </div>
+    `;
+    container.appendChild(typingDiv);
+    container.scrollTop = container.scrollHeight;
+}
+
+function hideTypingIndicator() {
+    const typingIndicator = document.getElementById('typing-indicator');
+    if (typingIndicator) typingIndicator.remove();
+}
+
+// Send message on Enter key
+function handleChatKeyPress(event) {
+    if (event.key === 'Enter') sendMessage();
+}
+
+</script>
+
+</body>
+</html>
